@@ -462,7 +462,7 @@ bcast_make_send_sock(struct hb_media * mp)
 	}
 
 #endif
-#if defined(SO_BINDTODEVICE)
+#if 0 && defined(SO_BINDTODEVICE)
 	{
 		/*
 		 *  We want to send out this particular interface
@@ -548,7 +548,7 @@ bcast_make_receive_sock(struct hb_media * mp) {
 		, sockfd);
 	}
 
-#if defined(SO_BINDTODEVICE)
+#if 0 && defined(SO_BINDTODEVICE)
 	{
 		/*
 		 *  We want to receive packets only from this interface...
