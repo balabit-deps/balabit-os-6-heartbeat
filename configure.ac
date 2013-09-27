@@ -311,6 +311,7 @@ case ${LibDirSuffix} in
 		  *64-bit*)	
 		  	case $host_os in
 			  openbsd*)	LibDirSuffix=lib;;
+			  linux-gnu)	 LibDirSuffix=lib;;
 		  	  *)		LibDirSuffix=lib64;;
 			esac;;
 		  *32-bit*)	LibDirSuffix=lib;;
