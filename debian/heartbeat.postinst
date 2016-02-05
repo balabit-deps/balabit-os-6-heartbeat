@@ -65,13 +65,20 @@ case "$1" in
         fi
 	update-rc.d heartbeat start 75 2 3 4 5 . stop 05 0 1 6 . >/dev/null || true
 
-	# do not start heartbeat.
-	# it needs to be configured manually anyways.
+	if which invoke-rc.d >/dev/null 2>&1; then
+		invoke-rc.d heartbeat start || true
+	else
+		/etc/init.d/heartbeat start || true
+	fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
-	# do not start/restart heartbeat.
-	# it needs to be configured manually anyways.
+	# restart heartbeat
+	if which invoke-rc.d >/dev/null 2>&1; then
+		invoke-rc.d heartbeat start || true
+	else
+		/etc/init.d/heartbeat start || true
+	fi
     ;;
 
     *)

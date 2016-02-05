@@ -1,0 +1,42 @@
+Description: Fix FTBFS
+ Fix FTBFS because of duplicate variable 'i' for both a struct and an
+ int variable.
+Author: Andres Rodriguez <andreserl@ubuntu.com>
+Bug-Ubuntu: https://launchpad.net/bugs/1188428
+Bug-Debian: http://bugs.debian.org/713662
+Forwarded: no
+
+--- heartbeat-3.0.5.orig/lib/plugins/HBcomm/ucast.c
++++ heartbeat-3.0.5/lib/plugins/HBcomm/ucast.c
+@@ -462,7 +462,7 @@ static int HB_make_send_sock(struct hb_m
+ 	struct ip_private *ei;
+ 	int tos;
+ #if defined(SO_BINDTODEVICE)
+-	struct ifreq i;
++	struct ifreq ifc;
+ #endif
+ #if defined(SO_REUSEPORT)
+ 	int i = 1;
+@@ -499,18 +499,18 @@ static int HB_make_send_sock(struct hb_m
+ 		 *
+ 		 * This is so we can have redundant NICs, and heartbeat on both
+ 		 */
+-		strcpy(i.ifr_name,  ei->interface);
++		strcpy(ifc.ifr_name,  ei->interface);
+ 
+ 		if (setsockopt(sockfd, SOL_SOCKET, SO_BINDTODEVICE,
+-				&i, sizeof(i)) == -1) {
++				&ifc, sizeof(ifc)) == -1) {
+ 			PILCallLog(LOG, PIL_CRIT,
+ 			  "ucast: error setting option SO_BINDTODEVICE(w) on %s: %s",
+-			  i.ifr_name, strerror(errno));
++			  ifc.ifr_name, strerror(errno));
+ 			close(sockfd);
+ 			return -1;
+ 		}
+ 		PILCallLog(LOG, PIL_INFO, "ucast: bound send socket to device: %s",
+-			i.ifr_name);
++			ifc.ifr_name);
+ 	}
+ #endif
+ #if defined(SO_REUSEPORT)
