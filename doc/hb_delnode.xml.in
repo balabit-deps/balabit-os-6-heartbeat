@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<refentry id="re-hbdelnode">
+  <refentryinfo>
+    <date>November 26, 2009</date>
+    <productname>Heartbeat</productname>
+    <productnumber>@VERSION@</productnumber>
+    <authorgroup>
+      <author>
+	<firstname>Alan</firstname>
+	<surname>Robertson</surname>
+	<contrib>hb_delnode</contrib>
+	<email>alanr@unix.sh</email>
+      </author>
+      <author>
+	<surname>Shi</surname>
+	<firstname>Guochun</firstname>
+	<contrib>man page</contrib>
+	<email>gshi@ncsa.uiuc.edu</email>
+      </author>
+      <author>
+	<firstname>Florian</firstname>
+	<surname>Haas</surname>
+	<contrib>man page</contrib>
+	<email>florian.haas@linbit.com</email>
+      </author>
+    </authorgroup>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>hb_delnode</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="manual">General commands</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+    <refname>hb_delnode</refname>
+    <refpurpose>sends a message to a Heartbeat cluster to remove one or more nodes</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <para><command>hb_delnode</command> <replaceable>node</replaceable> [<replaceable>node</replaceable>] [<replaceable>node</replaceable>]</para>
+  </refsynopsisdiv>
+  <refsection id="rs-hbdelnode-description">
+    <title>Description</title>
+    <para>@HA_NOARCHDATAHBDIR@/hb_delnode removes a node, or multiple
+    nodes, from the cluster configuration. If there is any node in the
+    arguments that is currently not a cluster member, the command
+    fails and no nodes are removed.</para>
+  </refsection>
+  <refsection id="rs-hbdelnode-options">
+    <title>Options</title>
+    <para>The following options are supported:</para>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <option>--help</option>
+	</term>
+	<listitem>
+	  <para>Issues a brief usage message.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  <refsection id="rs-hbdelnode-seealso">
+    <title>See also</title>
+    <para>
+      <citerefentry><refentrytitle>hb_addnode</refentrytitle><manvolnum>1</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>heartbeat</refentrytitle><manvolnum>8</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>cl_status</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+    </para>
+  </refsection>
+</refentry>

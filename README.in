@@ -1,0 +1,11 @@
+
+Welcome to the linux-ha project source tree.
+
+For building instructions and other documentation,
+please refer to http://linux-ha.org/wiki/Documentation
+
+You will most likely also need the Pacemaker Cluster Resource Manager,
+see http://clusterlabs.org/wiki/Documentation
+
+Please see also: doc/README
+

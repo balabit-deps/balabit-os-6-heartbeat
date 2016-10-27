@@ -1,0 +1,87 @@
+Linux-HA
+========
+
+  Providing Open Source High-Availability Software
+  for Linux and other Platforms since 1999
+
+  The Linux-HA project maintains a set of building blocks
+  for high availability cluster systems, including
+    * a cluster messaging layer (heartbeat, see below),
+    * a huge number of resource agents for a variety of applications,
+    * a plumbing library and error reporting toolkit (aka cluster-glue)
+
+      http://linux-ha.org/wiki/Main_Page
+      http://en.wikipedia.org/wiki/Computer_cluster
+      http://linux-ha.org/wiki/Heartbeat
+      http://linux-ha.org/wiki/Resource_Agents
+      http://linux-ha.org/wiki/Cluster_Glue
+
+
+Historical note
+===============
+
+  Since up to release 2.1.4 the messaging layer (Heartbeat proper),
+  the Local Resource Manager, "plumbing" infrastructure and STONITH
+  (now known as Cluster Glue), the Resource Agents, and the Cluster
+  Resource Manager (now Pacemaker) were all part of a single package
+  named heartbeat, the name was often applied to the Linux-HA
+  project as a whole.
+
+  This generalization is no longer accurate, the name heartbeat
+  should thus be used for the messaging layer exclusively. 
+
+
+Heartbeat
+=========
+
+  Heartbeat is a daemon that provides cluster infrastructure (communication and
+  membership) services to its clients. This allows clients to know about the
+  presence (or disappearance!) of peer processes on other machines and to easily
+  exchange messages with them.
+
+  In order to be useful to users, the Heartbeat daemon needs to be combined with
+  a cluster resource manager.  A cluster resource manager (CRM) has
+  the task of starting and stopping the services (IP addresses, web
+  servers, etc.) which the cluster will make highly available.
+
+  Heartbeat still comes with an integrated primitive resource
+  manager, which basically is just a shell script.  This is also
+  referred to as "v1 style" or "haresources style" configuration.
+
+  The haresources mode of operation is deprecated.
+  If you miss it, please see
+  http://www.planet-ha.org/#Configuring+Heartbeat+v1+Was+So+Simple
+
+  Pacemaker is the preferred cluster resource manager for clusters
+  based on the Heartbeat infrastructure layer.
+
+
+Reference Documentation
+=======================
+
+  To get you started, for further information, reference documentation and
+  setup recommendations, refer to
+    http://linux-ha.org/wiki/Documentation
+    http://clusterlabs.org/wiki/Documentation
+
+
+Help and Support
+================
+
+  For community support, mailing lists, IRC channels, and
+  other ways to report problems and get them solved, see
+  http://linux-ha.org/wiki/Support
+
+
+See Also
+========
+
+  Csync2
+    an easy way to keep a bunch of infrequently updated files
+    in sync over groups of nodes. http://oss.linbit.com/csync2/
+
+  DRBD
+    a nicely integrated (with Pacemaker) replication solution,
+    you won't need shared disks to do HA-clustering.
+    http://www.drbd.org
+

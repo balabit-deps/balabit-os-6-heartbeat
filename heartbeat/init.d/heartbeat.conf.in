@@ -1,0 +1,14 @@
+# see http://www.freedesktop.org/software/systemd/man/tmpfiles.d.html
+#Type  Path                       Mode  UID        GID       Age  Argument
+d      @HA_VARRUNHBDIR@         0750  hacluster  haclient  -
+d      @HA_VARRUNHBDIR@/ccm     0750  hacluster  haclient  -
+d      @HA_VARRUNHBDIR@/crm     0750  hacluster  haclient  -
+d      @HA_VARRUNHBDIR@/dopd    0750  hacluster  haclient  -
+
+# this will be re-created by the heartbeat master control process itself.
+# d      @HA_VARRUNHBRSCDIR@	1777  root       root      -
+
+# this should be shipped by pacemaker!
+d      /var/run/crm             0750  hacluster  haclient  -
+# this should be shipped by resource-agents!
+d      /var/run/resource-agents 0755  root       root      -

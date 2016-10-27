@@ -1,0 +1,243 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<refentry id="re-clstatus">
+  <refentryinfo>
+    <date>24 Nov 2009</date>
+    <productname>Heartbeat</productname>
+    <productnumber>@VERSION@</productnumber>
+    <authorgroup>
+      <author>
+	<firstname>Alan</firstname>
+	<surname>Robertson</surname>
+	<contrib>cl_status</contrib>
+	<email>alanr@unix.sh</email>
+      </author>
+      <author>
+	<firstname>Lars</firstname>
+	<surname>Ellenberg</surname>
+	<contrib>Heartbeat Maintainer; code fixes; documentation updates</contrib>
+	<email>lars.ellenberg@linbit.com</email>
+      </author>
+      <author>
+	<firstname>Juan Pedro</firstname>
+	<surname>Paredes Caballero</surname>
+	<contrib>man page</contrib>
+	<email>juampe@retemail.es</email>
+      </author>
+      <author>
+	<firstname>Simon</firstname>
+	<surname>Horman</surname>
+	<contrib>man page</contrib>
+	<email>horms@verge.net.au</email>
+      </author>
+      <author>
+	<firstname>Florian</firstname>
+	<surname>Haas</surname>
+	<contrib>man page</contrib>
+	<email>florian.haas@linbit.com</email>
+      </author>
+    </authorgroup>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>cl_status</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="manual">User commands</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+    <refname>cl_status</refname>
+    <refpurpose>Check status of the High-Availability Linux (Linux-HA)
+    subsystem</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <para><command>cl_status</command> <command>sub-command</command> <option>options</option> <parameter>parameters</parameter></para>
+  </refsynopsisdiv>
+  <refsection id="rs-clstatus-description">
+    <title>Description</title>
+    <para><command>cl_status</command> is used to check the status of
+    the High-Availability Linux subsystem.</para>
+  </refsection>
+  <refsection id="rs-clstatus-subcommands">
+    <title>Supported sub-commands</title>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <command>hbstatus</command>
+	</term>
+	<listitem>
+	  <para>Indicate if heartbeat is running on the local system.</para>
+	  <para>With <option>-v</option>, gives more details, similar to:
+	  <programlisting>
+version:        3.0.6 (10e3f2130ea1)
+managed by:     pacemaker       (respawn)
+
+ccm membership with quorum
+        instance 12
+        members 2
+                1 bob   (born: 6)
+                0 alice (born: 12)
+        member of partition
+
+bob     active  (nodetype: normal)
+        eth1    dead
+        eth0    up
+
+alice   active  (nodetype: normal)
+        eth1    dead
+        eth0    up
+
+10.43.9.55      ping    (nodetype: ping)
+        10.43.9.55      up
+	  </programlisting>
+	  </para>
+	  <para>Note: it is not a concern if a certain link from some node to itself is reported "dead".
+	  For example "mcast" directives usually don't see their own network packages.
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <command>listnodes</command>
+	</term>
+	<listitem>
+	  <para>List the nodes in the cluster.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <command>nodetype</command> <token>ping</token>|<token>normal</token>
+	</term>
+	<listitem>
+	  <para>List the nodes of the given type.</para>
+	  <note>
+	    <para>Ping nodes are obsolete in Pacemaker cluster, having
+	    been replaced with the pingd resource agent.</para>
+	  </note>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <command>listhblinks</command> <replaceable>node</replaceable>
+	</term>
+	<listitem>
+	  <para>List the network interfaces used as heartbeat links.
+	  <replaceable>node</replaceable> should be specified as
+	  listed in the
+	  <citerefentry><refentrytitle>ha.cf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+	  file for the cluster.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <command>hblinkstatus</command> <replaceable>node</replaceable> <replaceable>link</replaceable>
+	</term>
+	<listitem>
+	  <para>Show the status of a heartbeat
+	  link. <replaceable>node</replaceable> should be specified as
+	  listed in the
+	  <citerefentry><refentrytitle>ha.cf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+	  file for the cluster. <replaceable>link</replaceable> should
+	  be as per the output of the listhblinks subcommand.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <command>clientstatus</command> <replaceable>node</replaceable> <replaceable>client</replaceable> [<replaceable>timeout</replaceable>]
+	</term>
+	<listitem>
+	  <para>Show the status of heartbeat
+	  clients. <replaceable>node</replaceable> and
+	  <replaceable>client</replaceable> should be specified as
+	  listed in the
+	  <citerefentry><refentrytitle>ha.cf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+	  file for the cluster. Timeout is in milliseconds, the
+	  default is 100ms.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <command>rscstatus</command>
+	</term>
+	<listitem>
+	  <para>Show the status of cluster resources.  Status will be
+	  one of: local, foreign, all or none.</para>
+	  <note>
+	    <para>This option is deprecated, it is obsolete in
+	    Pacemaker clusters.</para>
+	  </note>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <command>parameter</command> <option>-p</option> <replaceable>parameter</replaceable>
+	</term>
+	<listitem>
+	  <para>Retrieve the value of cluster parameters.  The
+	  parameters may be one of the following: apiauth,
+	  auto_failback, baud, debug, debugfile, deadping, deadtime,
+	  hbversion, hopfudge, initdead, keepalive, logfacility,
+	  logfile, msgfmt, nice_failback, node, normalpoll, stonith,
+	  udpport, warntime, watchdog.</para>
+	  <note>
+	    <para>Some of these options are deprecated; see
+	    <citerefentry><refentrytitle>ha.cf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+	    </para>
+	  </note>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  <refsection id="rs-clstatus-options">
+    <title>Options</title>
+    <para>The following options are supported by heartbeat:</para>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <option>-v</option>
+	</term>
+	<listitem>
+	  <para>Report more details. Available with hbstatus, listnodes, and listhblinks.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-m</option>
+	</term>
+	<listitem>
+	  <para>Make the output more human readable.  The default
+	  output should be easier for scripts to parse.  Available
+	  with all commands.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-p</option>
+	</term>
+	<listitem>
+	  <para>List only 'ping' nodes.  Available with listnodes
+	  sub-command.</para>
+	  <note>
+	    <para>Ping nodes are obsolete in Pacemaker cluster, having
+	    been replaced with the pingd resource agent.</para>
+	  </note>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-n</option>
+	</term>
+	<listitem>
+	  <para>List only 'normal' nodes.  Available with listnodes
+	  sub-command.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  <refsection id="rs-clstatus-seealso">
+    <title>See also</title>
+    <para>
+      <citerefentry><refentrytitle>heartbeat</refentrytitle><manvolnum>8</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>ha.cf</refentrytitle><manvolnum>5</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>authkeys</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+    </para>
+  </refsection>
+</refentry>

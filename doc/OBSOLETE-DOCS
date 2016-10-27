@@ -1,0 +1,13 @@
+The following files in this directory are unmaintained, out of date,
+or obsolete. They still exist in the repository for reference
+purposes, but are no longer included in release tarballs, and are not
+installed on target systems.
+
+Writers who either pick up one of these orphaned documents, or remove
+them from the repository, should remove them from the list below.
+
+Design
+DirectoryMap.txt
+FHSnotes
+ipfail-diagram.pdf
+startstop.in

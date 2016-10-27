@@ -1,0 +1,166 @@
+#!/usr/bin/make -f
+# License: GNU General Public License (GPL)
+
+# Enable hardening
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+cfg:=--prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+  --libexecdir=/usr/lib \
+  --mandir=/usr/share/man --disable-crm \
+  --with-group-name=haclient --with-ccmuser-name=hacluster \
+  --enable-libc-malloc --disable-fatal-warnings
+
+DTMP:=`pwd`/debian/tmp
+RELEASE := $(shell dpkg-parsechangelog | awk '/^Version: / { print $$2 }')
+UPSTREAM := $(shell echo "$(RELEASE)" | sed 's/:\?\([0-9\.]\+\)-[0-9].*/\1/')
+
+build: build-arch build-indep
+build-arch: build-stamp
+build-indep: build-stamp
+build-stamp:
+	dh_testdir
+	# Only bootstrap as neccessary
+	if test -e ./configure -a ! -x ./configure; then		\
+		chmod u+x ./configure;					\
+	fi
+	if test -e ./py-compile -a ! -x ./py-compile; then		\
+		chmod u+x ./py-compile;					\
+	fi
+	test ! -x ./configure || /bin/bash ./configure $(cfg);
+	test -x ./configure || /bin/bash ./bootstrap $(cfg)
+	$(MAKE)
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	# Add here commands to clean up after the build process.
+	[ ! -f Makefile ] || $(MAKE) clean
+	[ ! -f Makefile ] || $(MAKE) distclean
+	rm -f tools/ccdv
+	-find . -name '*.py[co]' | xargs rm -f
+	dh_clean
+	rm -f libltdl.tar autoconf automake autoheader
+	rm -f debian/init debian/*.debhelper debian/*.substvars config.log
+	rm -r -f debian/heartbeat debian/heartbeat-dev debian/ldirectord \
+		debian/libpils0 debian/libpils-dev \
+		debian/libstonith0 debian/libstonith-dev debian/stonith
+	
+	# Zero autoconf foo
+	rm -f config.status libltdl/config.log libltdl/config.status 
+
+install: build install-stamp
+install-stamp:
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp \
+	  MAKE=make \
+	  docdir=/usr/share/doc/heartbeat
+	
+	mv $(DTMP)/usr/share/heartbeat/cts/README \
+		$(DTMP)/usr/share/doc/heartbeat/README.cts
+	
+	find $(DTMP)/usr/share/man -type f | xargs gzip -v --best
+	install -c -m 755 heartbeat/init.d/heartbeat \
+                $(DTMP)/etc/init.d/heartbeat
+	cd $(DTMP)/etc/ && ln -s ha.d heartbeat
+	sed -i "/dependency_libs/ s/'.*'/''/" `find . -name '*.la'`
+	
+	# remove more useless COPYING files
+	rm -rf ./debian/tmp/usr/share/doc/heartbeat/COPYING*
+
+	# changelog will be processed using dh_installchangelogs
+	rm -rf ./debian/tmp/usr/share/doc/heartbeat/ChangeLog
+
+	# remove unnecessary directories
+	rm -rf ./debian/heartbeat-dev/usr/include/
+	rm -rf ./debian/heartbeat-common-dev/usr/lib/stonith/plugins/stonith2/ribcl.py
+	
+	rm -rf ./debian/heartbeat/etc/ha.d/conf
+	rm -rf ./debian/heartbeat/etc/ha.d/cts
+	rm -rf ./debian/heartbeat/usr/lib/stonith
+	rm -rf ./debian/heartbeat/usr/lib/pils
+	rm -rf ./debian/heartbeat/usr/include/
+	rm -rf ./debian/heartbeat/usr/lib/heartbeat/plugins/AppHBNotification/
+	
+	rm -rf ./debian/heartbeat-common/usr/lib/ocf/resource.d/heartbeat/ldirectord
+	
+	# remove duplicate header file to not conflict with cluster-glue
+	rm -rf ./debian/libheartbeat2-dev/usr/include/heartbeat/ha_msg.h
+	rm -rf ./debian/libheartbeat2-dev/usr/include/heartbeat/compress.h
+
+	# move sysv init script and systemd service file to expected locations for dh_install
+	! test -e ./debian/tmp/usr/lib/tmpfiles.d/heartbeat.conf || \
+	mv ./debian/tmp/usr/lib/tmpfiles.d/heartbeat.conf ./debian/heartbeat.tmpfile
+	! test -e ./debian/tmp/lib/systemd/system/heartbeat.service || \
+	mv ./debian/tmp/lib/systemd/system/heartbeat.service ./debian/heartneat.service
+	! test -e ./debian/tmp/etc/init.d/heartbeat || \
+	mv ./debian/tmp/etc/init.d/heartbeat ./debian/heartbeat.init
+
+	dh_install --source=debian/tmp --fail-missing
+
+binary-indep: build install
+	
+	dh_testdir -i
+	dh_testroot -i
+	dh_installdebconf -i
+	dh_installdocs -i
+	dh_installexamples -i
+	dh_installinit -i -n -u 'defaults 20 32'
+	dh_installman -i
+	dh_installchangelogs -i
+	dh_link -i
+	dh_strip -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_makeshlibs -i -V
+	dh_installdeb -i
+	dh_perl -i
+	dh_python2 -i -V 2.6- --no-guessing-versions --no-guessing-deps
+	dh_shlibdeps -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+binary-arch: build install
+	# remove duplicate doc file
+	rm -rf `pwd`/debian/heartbeat/usr/share/doc/heartbeat/README.lrm_regression_tests
+	
+	dh_testdir -a
+	dh_testroot -a
+	dh_installdebconf -a
+	dh_installdocs -a
+	dh_installexamples -a
+	dh_installinit -a -n -u 'defaults 20 32'
+	dh_installman -a
+	dh_installchangelogs -a `pwd`/doc/ChangeLog
+	dh_lintian -a
+	dh_link -a
+	dh_strip -a
+	dh_compress -a
+	dh_fixperms -a
+	
+	# remove redundant license files
+	rm -rf `pwd`/debian/heartbeat/usr/share/doc/heartbeat/COPYING.*
+	rm -rf `pwd`/debian/heartbeat-common/usr/share/doc/heartbeat/COPYING.gz
+	
+	dh_makeshlibs -a -V
+	dh_installdeb -a
+	dh_perl -a
+	dh_python2 -a -V 2.6- --no-guessing-versions --no-guessing-deps
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+binary: binary-indep binary-arch
+#	@echo "Any unpackaged files follow (.a and .la files omitted):"
+#	@cd $(DTMP) && find ./ \! -type d | egrep -v \\\.l?a || true
+
+.PHONY: build clean binary binary-indep binary-arch install patch unpatch

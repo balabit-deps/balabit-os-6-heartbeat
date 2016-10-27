@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<refentry id="re-apphbd">
+  <refentryinfo>
+    <date>November 26, 2009</date>
+    <productname>Heartbeat</productname>
+    <productnumber>@VERSION@</productnumber>
+    <authorgroup>
+      <author>
+	<firstname>Alan</firstname>
+	<surname>Robertson</surname>
+	<contrib>apphbd</contrib>
+	<email>alanr@unix.sh</email>
+      </author>
+      <author>
+	<firstname>Andrea</firstname>
+	<surname>Brugger</surname>
+	<contrib>man page</contrib>
+	<email>andrea.l.brugger@intel.com</email>
+      </author>
+      <author>
+	<firstname>Florian</firstname>
+	<surname>Haas</surname>
+	<contrib>man page</contrib>
+	<email>florian.haas@linbit.com</email>
+      </author>
+    </authorgroup>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>apphbd</refentrytitle>
+    <manvolnum>8</manvolnum>
+    <refmiscinfo class="manual">System administration utilities</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+    <refname>apphbd</refname>
+    <refpurpose>Application Heartbeat Monitor for High-Availability Linux</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <para><command>apphbd</command> [<option>-srkdh</option>] [<option>-c</option> <replaceable>file</replaceable>]</para>
+  </refsynopsisdiv>
+  <refsection id="rs-apphbd-description">
+    <title>Description</title>
+    <warning>
+      <para>
+      <command>apphbd</command> is deprecated; its use is strongly
+      discouraged. The functionality provided by
+      <command>apphbd</command> has been replaced by resource-level
+      monitoring in Pacemaker.</para>
+    </warning>
+    <para><command>@HA_DAEMON_DIR@/apphbd</command> is a basic
+    application heartbeat monitor daemon for Linux-HA. A group of
+    Application Heartbeat APIs are defined for this heartbeat
+    monitoring service. Applications may register with the daemon in
+    order to be monitored. If an application fails to send a heartbeat
+    within the specified interval, the daemon will log an
+    event.</para>
+    <para>apphbd may use a watchdog timer to monitor itself.</para>
+    <para>apphbd extends its functionality by using plugins.
+    A plugin, <code>recmgr</code> notifies the recovery manager
+    daemon if certain events occur (e.g. an application fails to
+    heartbeat). </para>
+    <para>The Recovery Manager daemon
+    (<command>@HA_DAEMON_DIR@/recoverymgrd</command>) receives
+    notification from the <code>recmgr</code> plugin, then it tries to
+    execute recovery scripts as configured.  See the
+    <command>recoverymgrd</command> default configuration file,
+    <filename>recoverymgrd.conf</filename> for details.</para>
+    <para><command>recoverymgrd</command> registers itself with
+    <command>apphbd</command> as a client
+    application. <command>apphbd</command> should be started first
+    with the <code>recmgr</code> plugin loaded. Then,
+    <code>recoverymgrd</code> should be configured and started
+    </para>
+  </refsection>
+  <refsection id="rs-apphbd-options">
+    <title>Options</title>
+    <para>The following options are supported:</para>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <option>-s</option>
+	</term>
+	<listitem>
+	  <para>Show the status of apphbd, running or stopped.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-k</option>
+	</term>
+	<listitem>
+	  <para>Stop (kill) the daemon.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-r</option>
+	</term>
+	<listitem>
+	  <para>Restart the daemon. <command>apphbd</command> will
+	  reload its configuration file when restarted.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-d</option> <replaceable>level</replaceable>
+	</term>
+	<listitem>
+	  <para>Set the debug level.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-h</option>
+	</term>
+	<listitem>
+	  <para>Show a brief usage message.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-c</option> <replaceable>file</replaceable>
+	</term>
+	<listitem>
+	  <para>Set an alternate configuration file. The default
+	  configuration file is <filename>./apphbd.cf</filename>. For
+	  details on the file format and supported options, refer to
+	  the example <filename>apphbd.cf</filename> file found in the
+	  documentation directory.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsection>
+  <refsection id="rs-apphbd-example">
+    <title>Files</title>
+    <itemizedlist>
+      <listitem>
+	<para><filename>@HA_VARRUNDIR@/apphbd.pid</filename> &ndash; default PID file</para>
+      </listitem>
+      <listitem>
+	<para><filename>apphbd.cf</filename> &ndash; Default
+	configuration file for
+	<command>apphbd</command>. <command>apphbd</command> searches
+	the file in its working directory.</para>
+      </listitem>
+      <listitem>
+	<para><filename>recoverymgrd.conf</filename> &ndash; default
+	configuration file for recoverymgrd. recoverymgrd searches the
+	file in its working directory. An alternative configuration
+	file may be specified on the command line.</para>
+      </listitem>
+      <listitem>
+	<para><filename>@HA_PLUGIN_DIR@/AppHBNotification</filename>
+	&ndash; directory containing plugins for
+	<command>apphbd</command>.</para>
+      </listitem>
+    </itemizedlist>
+  </refsection>
+  <refsection id="rs-apphbd-seealso">
+    <title>See also</title>
+    <para>
+      <citerefentry><refentrytitle>heartbeat</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+    </para>
+  </refsection>
+</refentry>

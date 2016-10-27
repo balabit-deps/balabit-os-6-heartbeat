@@ -1,0 +1,20 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 01_docbook_path.dpatch by  <ivoks@lucid.init.lan>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+Index: heartbeat-3.0.5/doc/Makefile.am
+===================================================================
+--- heartbeat-3.0.5.orig/doc/Makefile.am	2011-06-22 12:02:26.677286404 -0400
++++ heartbeat-3.0.5/doc/Makefile.am	2011-06-22 12:02:46.327315233 -0400
+@@ -37,7 +37,7 @@
+ 			 hb_standby.1 hb_takeover.1 hb_addnode.1 hb_delnode.1 \
+ 			 ha.cf.5 authkeys.5
+ 
+-STYLESHEET_PREFIX 	?= http://docbook.sourceforge.net/release/xsl/current
++STYLESHEET_PREFIX 	?= /usr/share/xml/docbook/stylesheet/docbook-xsl
+ MANPAGES_STYLESHEET 	?= $(STYLESHEET_PREFIX)/manpages/docbook.xsl
+ HTML_STYLESHEET 	?= $(STYLESHEET_PREFIX)/xhtml/docbook.xsl
+ FO_STYLESHEET 		?= $(STYLESHEET_PREFIX)/fo/docbook.xsl

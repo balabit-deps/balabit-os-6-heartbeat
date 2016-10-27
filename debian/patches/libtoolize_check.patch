@@ -1,0 +1,59 @@
+Description: check for libtoolize rather than libtool
+Author: Johannes Schauer <j.schauer@email.de>
+Forwarded: no
+
+--- heartbeat-3.0.5+hg12629.orig/bootstrap
++++ heartbeat-3.0.5+hg12629/bootstrap
+@@ -173,23 +173,19 @@ ln -s `which $automake` ./automake
+ 
+ # Check for Libtool
+ pkg="libtool"
+-for command in libtool libtool14 libtool15 glibtool
+-do
+-  URL=$gnu/$pkg/
+-  if
+-    testProgram $command
+-  then
+-    : OK $pkg is installed
+-    libtool=$command
+-    libtoolize=`echo  "$libtool" | sed -e 's/libtool/libtoolize/'`
+-  fi
+-done
++URL=$gnu/$pkg/
++if
++  testProgram libtoolize
++then
++  : OK $pkg is installed
++  libtoolize=libtoolize
++fi
+ 
+ # Check to see if we got a valid command.
+ if 
+-    $libtool --version </dev/null >/dev/null 2>&1
++    $libtoolize --version </dev/null >/dev/null 2>&1
+ then
+-    echo "Libtool package $libtool found."
++    echo "Libtool package $libtoolize found."
+ else
+     RC=$?
+     cat <<-EOF >&2
+@@ -200,10 +196,6 @@ else
+ 	EOF
+ fi
+ 
+-# Create local copy so that the incremental updates will work.
+-rm -f          ./libtool
+-ln -s `which $libtool` ./libtool
+-
+ case $RC in
+   0)	;;
+   *)	exit $RC;;
+@@ -217,7 +209,7 @@ oneline() {
+   read x; echo "$x"
+ }
+ 
+-LT_version=`$libtool --version | oneline | sed -e 's%^[^0-9]*%%' -e s'% .*%%'`
++LT_version=`$libtoolize --version | oneline | sed -e 's%^[^0-9]*%%' -e s'% .*%%'`
+ LT_majvers=`echo "$LT_version" | sed -e 's%\..*%%'`
+ LT_minvers=`echo "$LT_version" | sed -e 's%^[^.]*\.%%' `
+ LT_minnum=`echo  "$LT_minvers" | sed -e 's%[^0-9].*%%'`

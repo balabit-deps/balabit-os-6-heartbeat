@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<refentry id="re-authkeys">
+  <refentryinfo>
+    <date>24 Nov 2009</date>
+    <productname>Heartbeat</productname>
+    <productnumber>@VERSION@</productnumber>
+    <authorgroup>
+      <author>
+	<firstname>Alan</firstname>
+	<surname>Robertson</surname>
+	<contrib>heartbeat, original Wiki page</contrib>
+	<email>alanr@unix.sh</email>
+      </author>
+      <author>
+	<firstname>Lars</firstname>
+	<surname>Ellenberg</surname>
+	<contrib>Heartbeat Maintainer; code fixes; documentation updates</contrib>
+	<email>lars.ellenberg@linbit.com</email>
+      </author>
+      <author>
+	<firstname>Florian</firstname>
+	<surname>Haas</surname>
+	<contrib>man page</contrib>
+	<email>florian.haas@linbit.com</email>
+      </author>
+    </authorgroup>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>authkeys</refentrytitle>
+    <manvolnum>5</manvolnum>
+    <refmiscinfo class="manual">Configuration Files</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+    <refname>authkeys</refname>
+    <refpurpose>Authentication file for the Heartbeat cluster messaging
+    layer</refpurpose>
+  </refnamediv>
+  <refsection id="rs-authkeys-description">
+    <title>Description</title>
+    <para><filename>@HA_HBCONF_DIR@/authkeys</filename> is read by
+    <citerefentry>
+      <refentrytitle>heartbeat</refentrytitle>
+      <manvolnum>8</manvolnum></citerefentry>. It enables Heartbeat to
+    securely authenticate cluster nodes.</para>
+    <para>This file must not be readable or writable by any users
+    other than root.</para>
+  </refsection>
+  <refsection id="rs-authkeys-file-format">
+    <title>File format</title>
+    <para>Two lines are required in the authkeys file:</para>
+    <orderedlist>
+      <listitem>
+	<para>A line which says which key to use in signing <emphasis>outgoing</emphasis> packets</para>
+      </listitem>
+      <listitem>
+	<para>One or more lines defining how
+	<emphasis>incoming</emphasis> packets might be being
+	signed.</para>
+      </listitem>
+    </orderedlist>
+    <para>The file must follow the following format:</para>
+    <programlisting><option>auth</option> <replaceable>num</replaceable>
+<replaceable>num</replaceable> <replaceable>method</replaceable> <replaceable>secret</replaceable>
+<replaceable>num</replaceable> <replaceable>method</replaceable> <replaceable>secret</replaceable>
+<replaceable>num</replaceable> <replaceable>method</replaceable> <replaceable>secret</replaceable>
+...</programlisting>
+    <para><replaceable>num</replaceable> is a numerical identifier,
+    between 1 and 15 inclusive. It must be unique within the
+    file.</para>
+    <para><replaceable>method</replaceable> is one of the available
+    authentication signature methods (see below for supported
+    methods).</para>
+    <para><replaceable>secret</replaceable> is an alphanumerical
+    shared secret used to identify cluster nodes to each other.</para>
+    <para><option>auth</option> <replaceable>num</replaceable> selects
+    the currently active authentication method and secret.</para>
+  </refsection>
+  <refsection id="rs-authkeys-supported-methods">
+    <title>Supported signature methods</title>
+    <para>The following signature methods are supported in
+    <filename>authkeys</filename> (listed here in alphabetical
+    order):</para>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <option>md5</option>
+	</term>
+	<listitem>
+	  <para>MD5 hash method. This method requires a shared
+	  secret.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>sha1</option>
+	</term>
+	<listitem>
+	  <para>SHA-1 hash method. This method requires a shared
+	  secret.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>crc</option>
+	</term>
+	<listitem>
+	  <para>Cyclic Redundancy Check hash method. This method does
+	  not require a shared secret and is insecure; it's use is
+	  strongly discouraged.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+    <para>An absolutely up-to-date list of authentication methods
+    supported may be retrieved by running <command>ls
+    <filename>@HA_PLUGIN_DIR@/HBauth/*.so</filename></command>.</para>
+  </refsection>
+</refentry>

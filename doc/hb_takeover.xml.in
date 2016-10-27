@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<refentry id="re-hbtakeover">
+  <refentryinfo>
+    <date>November 26, 2009</date>
+    <productname>Heartbeat</productname>
+    <productnumber>@VERSION@</productnumber>
+    <authorgroup>
+      <author>
+	<firstname>Alan</firstname>
+	<surname>Robertson</surname>
+	<contrib>hb_takeover</contrib>
+	<email>alanr@unix.sh</email>
+      </author>
+      <author>
+	<surname>Shi</surname>
+	<firstname>Guochun</firstname>
+	<contrib>man page</contrib>
+	<email>gshi@ncsa.uiuc.edu</email>
+      </author>
+      <author>
+	<firstname>Florian</firstname>
+	<surname>Haas</surname>
+	<contrib>man page</contrib>
+	<email>florian.haas@linbit.com</email>
+      </author>
+    </authorgroup>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>hb_takeover</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="manual">General commands</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+    <refname>hb_takeover</refname>
+    <refpurpose>issues a failover request to the cluster manager</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <para><command>hb_takeover</command> [<token>all</token>|<token>foreign</token>|<token>local</token>|<token>failback</token>]</para>
+  </refsynopsisdiv>
+  <refsection id="rs-hbtakeover-description">
+    <title>Description</title>
+    <warning>
+      <para>This command is deprecated. It is only suitable for legacy
+      Heartbeat clusters without Pacemaker enabled. In
+      Pacemaker-enabled clusters, the
+      <citerefentry><refentrytitle>crm</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+      shell supports switching individual nodes into standby mode, and
+      replaces <command>hb_takeover</command>.</para>
+    </warning>
+    <para>
+      <command>@HA_NOARCHDATAHBDIR@/hb_takeover</command> issues a
+      request to the cluster to move resources to the node where it is
+      invoked, from the other node. Issuing
+      <command>hb_takeover</command> on the current node is equivalent
+      to performing <command>hb_standby</command> on the other
+      node.</para>
+  </refsection>
+  <refsection id="rs-hbtakeover-caveats">
+    <title>Caveats</title>
+    <para><command>hb_takeover</command> is only usable in R1-style
+    configurations (i.e., those configured using the
+    <filename>haresources</filename> file).</para>
+  </refsection>
+  <refsection id="rs-hbtakeover-seealso">
+    <title>See also</title>
+    <para>
+      <citerefentry><refentrytitle>hb_standby</refentrytitle><manvolnum>1</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>heartbeat</refentrytitle><manvolnum>8</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>cl_status</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+    </para>
+  </refsection>
+</refentry>

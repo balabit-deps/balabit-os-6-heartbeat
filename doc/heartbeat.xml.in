@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<refentry id="re-heartbeat">
+  <refentryinfo>
+    <date>2 Dec 2014</date>
+    <productname>Heartbeat</productname>
+    <productnumber>@VERSION@</productnumber>
+    <authorgroup>
+      <author>
+	<firstname>Alan</firstname>
+	<surname>Robertson</surname>
+	<contrib>heartbeat</contrib>
+	<email>alanr@unix.sh</email>
+      </author>
+      <author>
+	<firstname>Lars</firstname>
+	<surname>Ellenberg</surname>
+	<contrib>Heartbeat Maintainer; code fixes; documentation updates</contrib>
+	<email>lars.ellenberg@linbit.com</email>
+      </author>
+      <author>
+	<firstname>Juan Pedro</firstname>
+	<surname>Paredes Caballero</surname>
+	<contrib>man page</contrib>
+	<email>juampe@retemail.es</email>
+      </author>
+      <author>
+	<firstname>Simon</firstname>
+	<surname>Horman</surname>
+	<contrib>man page</contrib>
+	<email>horms@verge.net.au</email>
+      </author>
+      <author>
+	<firstname>Florian</firstname>
+	<surname>Haas</surname>
+	<contrib>man page</contrib>
+	<email>florian.haas@linbit.com</email>
+      </author>
+    </authorgroup>
+  </refentryinfo>
+  <refmeta>
+    <refentrytitle>heartbeat</refentrytitle>
+    <manvolnum>8</manvolnum>
+    <refmiscinfo class="manual">System administration utilities</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+    <refname>heartbeat</refname>
+    <refpurpose>Heartbeat subsystem for High-Availability
+    Linux</refpurpose>
+  </refnamediv>
+  <refsection id="rs-heartbeat-description">
+    <title>Description</title>
+    <para>heartbeat  is  a  basic  heartbeat subsystem for Linux-HA.  It will run
+       scripts at initialisation, and when  machines  go  up  or  down.   This
+       version  will  also  perform IP address takeover using gratuitous ARPs.
+       It works correctly for a 2-node configuration,  and  is  extensible  to
+       larger configurations.</para>
+    <para>It implements the following kinds of heartbeats:</para>
+    <itemizedlist>
+      <listitem>
+	<para>UDP/IP v4 broadcast;</para>
+      </listitem>
+      <listitem>
+	<para>UDP/IP v4/v6 multicast;</para>
+      </listitem>
+      <listitem>
+	<para>UDP/IP v4/v6 unicast;</para>
+      </listitem>
+      <listitem>
+	<para>Even such exotic protocols as TIPC or RDS.</para>
+      </listitem>
+      <listitem>
+	<para>Bidirectional Serial Rings ("raw" serial ports) &mdash;
+	this type is deprecated and should no longer be used;</para>
+      </listitem>
+      <listitem>
+	<para>special "ping" heartbeats for routers, etc. &mdash; this
+	type has been superseded by functionality in
+	<citerefentry><refentrytitle>pacemaker</refentrytitle></citerefentry>
+	and should no longer be used.</para>
+      </listitem>
+    </itemizedlist>
+    <para>Comprehensive documentation on heartbeat is available in the
+    Heartbeat User's Guide.  If this documentation is not installed on
+    your system, it can be found at http://linux-ha.org/.</para>
+  </refsection>
+  <refsection id="rs-heartbeat-options">
+    <title>Options</title>
+    <para>The following options are supported by heartbeat:</para>
+    <variablelist>
+      <varlistentry>
+	<term>
+	  <option>-d</option>
+	</term>
+	<listitem>
+	  <para>Increment debugging level. Higher levels are more
+	  verbose.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-r</option>
+	</term>
+	<listitem>
+	  <para>Reload heartbeat. This option is functionally
+	  identical to sending a running heartbeat process a HUP
+	  signal. If the configuration has not changed, then this
+	  option is essentially a no-op. If
+	  <citerefentry><refentrytitle>ha.cf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+	  or
+	  <citerefentry><refentrytitle>authkeys</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+	  has changed, then heartbeat will re-read these files and
+	  update its configuration.</para>
+	  <para>This option may not be used together with
+	  <option>-R</option>.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-k</option>
+	</term>
+	<listitem>
+	  <para>Kill (stop) heartbeat.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-s</option>
+	</term>
+	<listitem>
+	  <para>Report heartbeat status.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-R</option>
+	</term>
+	<listitem>
+	  <para>Heartbeat restart exec flag (internal use only).  May
+	  not be used with <option>-r</option>.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-C</option>
+	</term>
+	<listitem>
+	  <para>Heartbeat current resource state for restart (internal
+	  use only). Only valid with <option>-R</option>.</para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term>
+	  <option>-V</option>
+	</term>
+	<listitem>
+	  <para>Print out heartbeat version.</para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+    <para>Note that most of these options are used for supporting the
+    heartbeat init script, which provides the conventional start,
+    stop, status and restart options (among others). It is recommended
+    to use this rather than invoking the heartbeat command
+    directly.</para>
+  </refsection>
+  <refsection id="rs-heartbeat-seealso">
+    <title>See also</title>
+    <para>
+      <citerefentry><refentrytitle>ha.cf</refentrytitle><manvolnum>5</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>authkeys</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+    </para>
+  </refsection>
+</refentry>
