@@ -1,3 +1,9 @@
+heartbeat (1:3.0.6-2bb1) UNRELEASED; urgency=medium
+
+  * Balabit patched version
+
+ -- Balabit Platform Team <devnull@dev.null>  Fri, 04 Nov 2016 11:10:09 +0100
+
 heartbeat (1:3.0.6-2) unstable; urgency=medium
 
   * Build-Depends: resource-agents instead of -dev.
